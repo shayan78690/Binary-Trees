@@ -1,0 +1,46 @@
+import java.util.List;
+import java.util.ArrayList;
+public class Solution {
+    public static List<List<Integer>> getTreeTraversal(TreeNode root) {
+        List<Integer> list1 = new ArrayList<>();
+        List<Integer> list2 = new ArrayList<>();
+        List<Integer> list3 = new ArrayList<>();
+
+        preorder(root, list1);
+        inorder(root, list2);
+        postorder(root, list3);
+
+        List<List<Integer>> list = new ArrayList<>();
+        list.add(list2);
+        list.add(list1);
+        list.add(list3);
+        return list; 
+    }
+
+    public static void preorder(TreeNode root, List<Integer> list1) {
+        if(root == null) {
+            return;
+        }
+        list1.add(root.data);
+        preorder(root.left, list1);
+        preorder(root.right, list1);
+    }
+
+    public static void inorder(TreeNode root, List<Integer> list2) {
+        if(root == null) {
+            return;
+        }
+        inorder(root.left, list2);
+        list2.add(root.data);
+        inorder(root.right, list2);
+    }
+
+    public static void postorder(TreeNode root, List<Integer> list3) {
+        if(root == null) {
+            return;
+        }
+        postorder(root.left, list3);
+        postorder(root.right, list3);
+        list3.add(root.data);
+    }
+}
