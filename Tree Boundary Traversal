@@ -1,0 +1,67 @@
+class Solution {
+    boolean isLeafNode(Node node) {
+        return (node.left == null && node.right == null);
+    }
+    
+    ArrayList<Integer> boundaryTraversal(Node node) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(node == null) {
+            return list;
+        }
+        if(isLeafNode(node) == false) {
+            list.add(node.data);
+        }
+        leftTraversal(node, list);
+        addLeafNodes(node, list);
+        rightTraversal(node, list);
+        return list;
+    }
+    
+    void leftTraversal(Node root, ArrayList<Integer> list) {
+        Node current = root.left;
+        while(current != null) {
+            if(!isLeafNode(current)) {
+                list.add(current.data);
+            }
+            if(current.left != null) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+        }
+    }
+    
+    void addLeafNodes(Node root, ArrayList<Integer> list) {
+        if(isLeafNode(root)) {
+            list.add(root.data);
+            return;
+        }
+        
+        if(root.left != null) {
+            addLeafNodes(root.left, list);
+        }
+        if(root.right != null) {
+            addLeafNodes(root.right, list);
+        }
+    }
+    
+    void rightTraversal(Node root, ArrayList<Integer> list) {
+        Node current = root.right;
+        Stack<Node> stack = new Stack<>();
+        while(current != null) {
+            if(!isLeafNode(current)) {
+                stack.push(current);
+            }
+            if(current.right != null) {
+                current = current.right;
+            } else {
+                current = current.left;
+            }
+        }
+        
+        while(!stack.isEmpty()) {
+            list.add(stack.pop().data);
+        }
+    }
+    
+}
