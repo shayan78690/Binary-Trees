@@ -1,0 +1,46 @@
+/**
+ * Definition for binary tree
+ * class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) {
+ *      val = x;
+ *      left=null;
+ *      right=null;
+ *     }
+ * }
+ */
+import java.util.*;
+
+public class Solution {
+    public int[] solve(TreeNode A, int B) {
+        ArrayList<Integer> list = new ArrayList<>();
+       
+        func(A, list, B);
+        int ans[] = new int[list.size()];
+        for(int i = 0; i < list.size(); i++) {
+            ans[i] = list.get(i);
+        }       
+        return ans;
+    }
+    
+    public boolean func(TreeNode root, ArrayList<Integer> list, int B) {
+        if(root == null) {
+            return false;
+        }
+        list.add(root.val);
+        
+        if(root.val == B) {
+            return true;
+        }
+        
+        if(func(root.left, list, B) || func(root.right, list, B)) {
+            return true;
+        }
+        
+        list.remove(list.size()-1);
+        return false;
+        
+    }
+}
