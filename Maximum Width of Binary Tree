@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    class Tuple {
+        TreeNode node;
+        int pos;
+        int level;
+
+        Tuple(TreeNode node, int pos, int level) {
+            this.node = node;
+            this.pos = pos;
+            this.level = level;
+        }
+    }
+    public int widthOfBinaryTree(TreeNode root) {
+        if(root == null) {
+            return 0;
+        }
+        int maxWidth = 0;
+        Queue<Tuple> q = new LinkedList<>();
+
+        q.offer(new Tuple(root, 0, 0));
+        int prevPos = 0;
+        int prevLevel = 0;
+        while(!q.isEmpty()) {
+            Tuple t = q.poll();
+            TreeNode node = t.node;
+            int pos = t.pos;
+            int level = t.level;
+
+            if(level != prevLevel) {
+                prevLevel = level;
+                prevPos = pos;
+            }
+
+            maxWidth = Math.max(maxWidth, pos - prevPos + 1);
+
+            if(node.left != null) {
+                q.offer(new Tuple(node.left, 2*pos, level+1));
+            }
+            if(node.right != null) {
+                q.offer(new Tuple(node.right, 2*pos+1, level+1));
+            }
+        }
+        return maxWidth;
+    }
+}
