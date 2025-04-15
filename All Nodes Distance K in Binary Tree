@@ -1,0 +1,72 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+
+    public void parentNode(TreeNode root, HashMap<TreeNode, TreeNode> parent) {
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            TreeNode node = q.poll();
+            if (node.left != null) {
+                parent.put(node.left, node);
+                q.add(node.left);
+            }
+            if (node.right != null) {
+                parent.put(node.right, node);
+                q.add(node.right);
+            }
+        }
+    }
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int k) {
+        HashMap<TreeNode, TreeNode> parent = new HashMap<>();
+        parentNode(root, parent);
+
+        Queue<TreeNode> q = new LinkedList<>();
+        HashMap<TreeNode, Boolean> visited = new HashMap<>();
+        q.add(target);
+        visited.put(target, true);
+
+        int level = 0;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            if (level == k) break;
+            level++;
+
+            for (int i = 0; i < size; i++) {
+                TreeNode node = q.poll();
+                
+                if (node.left != null && visited.get(node.left) == null) {
+                    q.add(node.left);
+                    visited.put(node.left, true);
+                }
+                
+                if (node.right != null && visited.get(node.right) == null) {
+                    q.add(node.right);
+                    visited.put(node.right, true);
+                }
+
+                TreeNode par = parent.get(node);
+                if (par != null && visited.get(par) == null) {
+                    q.add(par);
+                    visited.put(par, true);
+                }
+            }
+        }
+
+        List<Integer> ans = new ArrayList<>();
+        while (!q.isEmpty()) {
+            ans.add(q.poll().val);
+        }
+
+        return ans;
+    }
+}
