@@ -1,0 +1,83 @@
+/**********************************************************	
+	
+	Following is the representation of Binary Tree Node:
+ 	
+ 	class BinaryTreeNode<T> {
+		T data;
+		BinaryTreeNode<T> left;
+		BinaryTreeNode<T> right;
+		
+		public BinaryTreeNode(T data) {
+			this.data = data;
+		}
+	}
+
+*********************************************************/
+import java.util.*;
+
+public class Solution
+{
+
+	public static BinaryTreeNode<Integer> findParent(BinaryTreeNode<Integer> root, HashMap<BinaryTreeNode<Integer>, BinaryTreeNode<Integer>> map, int start) {
+		Queue<BinaryTreeNode<Integer>> q = new LinkedList<>();
+		q.add(root);
+		BinaryTreeNode<Integer> res = null;
+		while(!q.isEmpty()) {
+			BinaryTreeNode<Integer> node = q.poll();
+			if(node.data == start) {
+				res = node;
+			}
+			if(node.left != null) {
+				q.add(node.left);
+				map.put(node.left, node);
+			}
+			if(node.right != null) {
+				q.add(node.right);
+				map.put(node.right, node);
+			}
+		}
+		return res;
+	}
+
+public static int timeToBurnTree(BinaryTreeNode<Integer> root, int start)
+    {
+		HashMap<BinaryTreeNode<Integer>, BinaryTreeNode<Integer>> map = new HashMap<>();
+		BinaryTreeNode<Integer> target = findParent(root, map, start);
+		int maxi = findMaxDistance(map, target);
+		return maxi;
+    }
+
+	public static int findMaxDistance(HashMap<BinaryTreeNode<Integer>, BinaryTreeNode<Integer>> map, BinaryTreeNode<Integer> target) {
+		Queue<BinaryTreeNode<Integer>> q = new LinkedList<>();
+		HashMap<BinaryTreeNode<Integer>, Integer> visited = new HashMap<>();
+		q.add(target);
+		visited.put(target, 1);
+		int maxi = 0;
+		while(!q.isEmpty()) {
+			int size = q.size();
+			int fl = 0;
+			for(int i = 0; i < size; i++) {
+				BinaryTreeNode<Integer> node = q.poll();
+				if(node.left != null && visited.get(node.left) == null) {
+					q.add(node.left);
+					visited.put(node.left, 1);
+					fl = 1;
+				}
+				if(node.right != null && visited.get(node.right) == null) {
+					q.add(node.right);
+					visited.put(node.right, 1);
+					fl = 1;
+				}
+				if(map.get(node) != null && visited.get(map.get(node)) == null) {
+					q.add(map.get(node));
+					visited.put(map.get(node), 1);
+					fl = 1;
+				}
+			}
+			if(fl == 1) {
+				maxi++;
+			}
+		}
+		return maxi;
+	}
+}
